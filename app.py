@@ -11,7 +11,7 @@ import pandas as pd
 # ----------------------------------
 with open("model/model.pkl", "rb") as f:
     model = pickle.load(f)
-
+Model_version = "1.0.0"
 app = FastAPI()
 
 # ----------------------------------
@@ -105,6 +105,19 @@ class UserInput(BaseModel):
             return 2
         return 3
     
+@app.get('/')
+def home():
+    return {'message':'Insurence Premium Prediction API'}
+
+@app.get('/health')
+def health_check():
+    return {
+        'status':'ok',
+        'version': Model_version,
+        'model_loaded': model is not None
+    }
+
+
 
 @app.post('/predict')
 def predict_premium(data: UserInput):
